@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 from ..db import db
@@ -6,7 +7,7 @@ class Task(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str]
     description: Mapped[str]
-    completed_at: Mapped[datetime]
+    completed_at: Mapped[Optional[datetime]]
 
     def to_dict(self):
         """Return object attributes in dictionary format.
@@ -18,7 +19,7 @@ class Task(db.Model):
             "id": self.id,
             "title": self.title,
             "description": self.description,
-            "completed_at": self.completed_at,
+            "is_complete": bool(self.completed_at),
         }
 
 
