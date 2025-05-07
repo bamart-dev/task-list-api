@@ -1,4 +1,5 @@
-from flask import abort, make_response
+from sqlalchemy import desc
+from flask import abort, make_response, request
 from app.db import db
 
 
@@ -45,7 +46,14 @@ def create_model(cls, model_info):
 
 def get_all_models(cls):
     """Retrieve all models from database."""
-    query = db.select(cls).order_by(cls.id)
-    models = db.session.scalars(query)
+    query = db.select(cls)
+    order = request.args.get("sort")
+
+    if order == "desc":
+        models = db.session.scalars(query.order_by(desc(cls.title)))
+    elif order == "asc":
+        models = db.session.scalars(query.order_by(cls.title))
+    else:
+        models = db.session.scalars(query.order_by(cls.id))
 
     return [model.to_dict() for model in models]
