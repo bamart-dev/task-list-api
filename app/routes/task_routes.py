@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from flask import Blueprint, request, Response, abort, make_response
 from .route_utilities import validate_model, create_model, get_all_models
 from app.db import db
@@ -37,6 +38,26 @@ def update_task(task_id):
         response = {"details": f"Invalid request: missing {e.args[0]}"}
         abort(make_response(response, 400))
 
+    db.session.commit()
+
+    return Response(status=204, mimetype="application/json")
+
+
+@bp.patch("/<task_id>/mark_complete")
+def mark_task_complete(task_id):
+    task = validate_model(Task, task_id)
+
+    task.completed_at = datetime.now(tz=timezone.utc)
+    db.session.commit()
+
+    return Response(status=204, mimetype="application/json")
+
+
+@bp.patch("/<task_id>/mark_incomplete")
+def mark_task_incomplete(task_id):
+    task = validate_model(Task, task_id)
+
+    task.completed_at = None
     db.session.commit()
 
     return Response(status=204, mimetype="application/json")
