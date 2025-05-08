@@ -19,7 +19,7 @@ def validate_model(cls, model_id):
     model = db.session.scalar(query)
 
     if not model:
-        message = {"error": f"{cls.__name__} ID ({model_id}) not found."}
+        message = {"message": f"{cls.__name__} ID ({model_id}) not found."}
         abort(make_response(message, 404))
 
     return model
@@ -40,8 +40,9 @@ def create_model(cls, model_info):
 
     db.session.add(model)
     db.session.commit()
+    model_name = cls.__name__.lower()
 
-    return {"task": model.to_dict()}, 201
+    return {f"{model_name}": model.to_dict()}, 201
 
 
 def get_all_models(cls):
