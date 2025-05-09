@@ -20,12 +20,16 @@ class Task(db.Model):
         When called on a Task object, the method returns a dictionary
         containing key value pairs corresponding to the object's attributes.
         """
-        return {
+        task = {
             "id": self.id,
             "title": self.title,
             "description": self.description,
             "is_complete": bool(self.completed_at),
         }
+        if self.goal_id:  # adds "goal_id" field if goal_id exists
+            task["goal_id"] = self.goal_id
+
+        return task
 
 
     @classmethod
