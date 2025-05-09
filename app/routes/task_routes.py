@@ -9,26 +9,26 @@ import requests
 bp = Blueprint("task_bp", __name__, url_prefix="/tasks")
 
 
-@bp.post("")
+@bp.post("", strict_slashes=False)
 def create_task():
     request_body = request.get_json()
 
     return create_model(Task, request_body)
 
 
-@bp.get("")
+@bp.get("", strict_slashes=False)
 def get_all_tasks():
     return get_all_models(Task)
 
 
-@bp.get("/<task_id>")
+@bp.get("/<task_id>", strict_slashes=False)
 def get_one_task(task_id):
     task = validate_model(Task, task_id)
 
     return {"task": task.to_dict()}
 
 
-@bp.put("/<task_id>")
+@bp.put("/<task_id>", strict_slashes=False)
 def update_task(task_id):
     task = validate_model(Task, task_id)
     request_body = request.get_json()
@@ -45,7 +45,7 @@ def update_task(task_id):
     return Response(status=204, mimetype="application/json")
 
 
-@bp.patch("/<task_id>/mark_complete")
+@bp.patch("/<task_id>/mark_complete", strict_slashes=False)
 def mark_task_complete(task_id):
     task = validate_model(Task, task_id)
 
@@ -66,7 +66,7 @@ def mark_task_complete(task_id):
     return Response(status=204, mimetype="application/json")
 
 
-@bp.patch("/<task_id>/mark_incomplete")
+@bp.patch("/<task_id>/mark_incomplete", strict_slashes=False)
 def mark_task_incomplete(task_id):
     task = validate_model(Task, task_id)
 
@@ -76,7 +76,7 @@ def mark_task_incomplete(task_id):
     return Response(status=204, mimetype="application/json")
 
 
-@bp.delete("/<task_id>")
+@bp.delete("/<task_id>", strict_slashes=False)
 def delete_task(task_id):
     task = validate_model(Task, task_id)
 

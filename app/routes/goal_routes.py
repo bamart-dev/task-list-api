@@ -7,14 +7,14 @@ from app.models.task import Task
 bp = Blueprint("goal_bp", __name__, url_prefix="/goals")
 
 
-@bp.post("")
+@bp.post("", strict_slashes=False)
 def create_goal():
     request_body = request.get_json()
 
     return create_model(Goal, request_body)
 
 
-@bp.post("/<goal_id>/tasks")
+@bp.post("/<goal_id>/tasks", strict_slashes=False)
 def add_tasks_to_goal(goal_id):
     goal = validate_model(Goal, goal_id)
     task_ids = request.get_json()["task_ids"]
@@ -31,19 +31,19 @@ def add_tasks_to_goal(goal_id):
     return {"id": goal.id, "task_ids": task_ids}
 
 
-@bp.get("")
+@bp.get("", strict_slashes=False)
 def get_all_goals():
     return get_all_models(Goal)
 
 
-@bp.get("/<goal_id>")
+@bp.get("/<goal_id>", strict_slashes=False)
 def get_one_goal(goal_id):
     goal = validate_model(Goal, goal_id)
 
     return {"goal": goal.to_dict()}
 
 
-@bp.get("<goal_id>/tasks")
+@bp.get("<goal_id>/tasks", strict_slashes=False)
 def get_tasks_by_goal(goal_id):
     goal = validate_model(Goal, goal_id)
     goal_tasks = goal.to_dict()
@@ -53,7 +53,7 @@ def get_tasks_by_goal(goal_id):
     return goal_tasks
 
 
-@bp.put("/<goal_id>")
+@bp.put("/<goal_id>", strict_slashes=False)
 def update_goal(goal_id):
     goal = validate_model(Goal, goal_id)
     request_body = request.get_json()
@@ -68,7 +68,7 @@ def update_goal(goal_id):
     return Response(status=204, mimetype="application/json")
 
 
-@bp.delete("/<goal_id>")
+@bp.delete("/<goal_id>", strict_slashes=False)
 def delete_goal(goal_id):
     goal = validate_model(Goal, goal_id)
 
